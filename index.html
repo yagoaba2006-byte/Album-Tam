@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0A0E1A" />
+<title>L'album de Tam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E1A;
+  --panel:#141B2E;
+  --panel-2:#1C2540;
+  --line:rgba(255,255,255,.08);
+  --gold:#F5C451;
+  --gold-hi:#FFE08A;
+  --silver:#C7D0DB;
+  --rose:#FF5E7E;
+  --rose-hi:#FF8FA8;
+  --text:#EAF0FF;
+  --muted:#8A93A8;
+  --ok:#5BD6A0;
+  --shadow:0 18px 50px rgba(0,0,0,.5);
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #18223e 0, transparent 60%),
+    radial-gradient(900px 500px at 50% -5%, rgba(245,196,81,.08), transparent 55%),
+    var(--bg);
+  background-color:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{max-width:760px;margin:0 auto;padding:0 16px 120px;position:relative}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(180deg, rgba(10,14,26,.96), rgba(10,14,26,.78) 70%, transparent);
+  backdrop-filter:blur(8px);
+  padding:14px 0 10px;margin-bottom:8px;
+}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;flex-direction:column;line-height:1}
+.brand .kicker{font-family:'Oswald';font-weight:600;letter-spacing:.22em;font-size:11px;color:var(--gold);text-transform:uppercase}
+.brand .title{font-family:'Caveat';font-weight:700;font-size:34px;color:var(--text);margin-top:-2px}
+.brand .title b{color:var(--rose-hi);font-weight:700}
+.icon-btn{
+  width:42px;height:42px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--text);font-size:18px;cursor:pointer;
+  display:grid;place-items:center;transition:.2s;
+}
+.icon-btn:hover{background:var(--panel-2)}
+.icon-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* progress in header */
+.head-progress{margin-top:12px}
+.bar{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid var(--line)}
+.bar > span{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--rose),var(--gold));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.head-progress .meta{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--muted)}
+.head-progress .meta b{color:var(--text);font-family:'Oswald';font-weight:600}
+
+/* ---------- REWARD BANNER ---------- */
+.reward{
+  margin:14px 0;border-radius:var(--radius);position:relative;overflow:hidden;
+  border:1px solid rgba(245,196,81,.35);
+  background:linear-gradient(135deg, rgba(245,196,81,.16), rgba(255,94,126,.10));
+  padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;
+}
+.reward .coin{font-size:26px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.reward .rtext{flex:1}
+.reward .rtext .t1{font-family:'Oswald';font-weight:700;font-size:15px;letter-spacing:.02em}
+.reward .rtext .t2{font-size:12px;color:var(--muted);margin-top:2px}
+.reward .chip{font-family:'Oswald';font-weight:700;font-size:20px;color:#1a1205;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));padding:6px 12px;border-radius:10px;
+  box-shadow:0 6px 16px rgba(245,196,81,.35)}
+.reward.done{border-color:var(--ok)}
+.reward.done .chip{background:linear-gradient(180deg,#8af0c4,var(--ok));color:#06301f}
+
+/* ---------- PACK HUB ---------- */
+.hub{
+  margin:18px 0;border-radius:var(--radius);background:var(--panel);
+  border:1px solid var(--line);box-shadow:var(--shadow);
+  padding:26px 20px;text-align:center;position:relative;overflow:hidden;
+}
+.hub::before{content:"";position:absolute;inset:-40% -10% auto;height:280px;
+  background:radial-gradient(closest-side, rgba(245,196,81,.18), transparent);pointer-events:none}
+.pack-mini{
+  width:120px;height:160px;margin:0 auto 6px;position:relative;cursor:pointer;
+  transition:transform .25s;
+}
+.pack-mini:hover{transform:translateY(-4px) scale(1.02)}
+.pack-art{
+  width:100%;height:100%;border-radius:14px;position:relative;overflow:hidden;
+  background:
+    linear-gradient(160deg, #20294a, #0e1428);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 16px 40px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+  display:grid;place-items:center;
+}
+.pack-art .glow{position:absolute;inset:0;background:
+  radial-gradient(60% 40% at 50% 18%, rgba(245,196,81,.5), transparent 70%);mix-blend-mode:screen}
+.pack-art .seam{position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%);
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.25),transparent)}
+.pack-art .logo{font-family:'Oswald';font-weight:700;letter-spacing:.15em;font-size:13px;
+  color:var(--gold-hi);text-transform:uppercase;text-shadow:0 2px 8px rgba(0,0,0,.6);z-index:2;text-align:center;line-height:1.3}
+.pack-art .logo small{display:block;font-size:9px;letter-spacing:.3em;color:var(--rose-hi);margin-top:4px}
+.hub h2{font-family:'Oswald';font-weight:700;font-size:22px;margin:10px 0 2px}
+.hub p.sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+.btn{
+  font-family:'Oswald';font-weight:700;letter-spacing:.04em;font-size:16px;
+  border:none;border-radius:14px;padding:15px 26px;cursor:pointer;color:#1a1205;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  box-shadow:0 12px 30px rgba(245,196,81,.35);transition:.18s;text-transform:uppercase;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(245,196,81,.45)}
+.btn:active{transform:translateY(0)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.btn[disabled]{filter:grayscale(.5) brightness(.8);cursor:not-allowed;box-shadow:none}
+.countdown{font-family:'Oswald';font-weight:700;font-size:30px;letter-spacing:.04em;color:var(--text);margin:6px 0 2px}
+.countdown small{display:block;font-family:'Inter';font-weight:500;font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted)}
+
+/* ---------- PAGE NAV ---------- */
+.nav-title{display:flex;align-items:center;justify-content:space-between;margin:22px 4px 12px}
+.nav-title h3{font-family:'Oswald';font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;-ms-overflow-style:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--panel);color:var(--text);
+  border-radius:12px;padding:9px 14px;cursor:pointer;font-size:13px;font-weight:600;transition:.18s;
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+}
+.tab .cnt{font-family:'Oswald';font-size:11px;color:var(--muted)}
+.tab.active{border-color:var(--gold);background:linear-gradient(180deg,rgba(245,196,81,.18),rgba(245,196,81,.06));color:var(--text)}
+.tab.active .cnt{color:var(--gold)}
+.tab.complete .cnt{color:var(--ok)}
+.tab.super{border-color:rgba(245,196,81,.5)}
+
+/* ---------- ALBUM GRID ---------- */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin:6px 4px 12px}
+.page-head .pn{font-family:'Caveat';font-weight:700;font-size:30px;line-height:1}
+.page-head .pp{font-family:'Oswald';font-weight:600;font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:480px){.grid{grid-template-columns:repeat(3,1fr);gap:9px}}
+
+.card{
+  position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;cursor:pointer;
+  background:var(--panel-2);border:1px solid var(--line);transition:transform .15s;
+}
+.card:active{transform:scale(.97)}
+.card .num{position:absolute;top:6px;left:7px;font-family:'Oswald';font-weight:700;font-size:12px;
+  color:var(--text);z-index:3;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .frame{position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:2}
+
+/* locked slot */
+.card.locked{background:repeating-linear-gradient(135deg,#10182c,#10182c 8px,#0d1424 8px,#0d1424 16px)}
+.card.locked .lock{position:absolute;inset:0;display:grid;place-items:center;color:#2f3a57;font-size:26px}
+.card.locked .bignum{position:absolute;bottom:7px;right:8px;font-family:'Oswald';font-weight:700;
+  font-size:22px;color:#26314e}
+
+/* rarity frames (owned) */
+.card.common .frame{border:1.5px solid rgba(255,255,255,.10)}
+.card.rare .frame{border:1.5px solid var(--silver);box-shadow:inset 0 0 18px rgba(199,208,219,.25)}
+.card.rare::after,.card.legendary::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.18) 48%,transparent 60%);
+  background-size:300% 300%;animation:holo 4.5s linear infinite;pointer-events:none}
+.card.legendary .frame{border:1.5px solid var(--gold);box-shadow:inset 0 0 22px rgba(245,196,81,.4)}
+.card.legendary::after{background:linear-gradient(115deg,transparent 35%,rgba(245,196,81,.35) 48%,transparent 60%);background-size:300% 300%}
+@keyframes holo{0%{background-position:120% 0}100%{background-position:-120% 0}}
+
+.card .dup{position:absolute;bottom:6px;right:7px;z-index:3;font-family:'Oswald';font-weight:700;
+  font-size:12px;color:#1a1205;background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  padding:1px 6px;border-radius:7px;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.card .newtag{position:absolute;top:6px;right:6px;z-index:3;font-family:'Oswald';font-weight:700;
+  font-size:9px;letter-spacing:.08em;color:#fff;background:var(--rose);padding:2px 5px;border-radius:6px}
+
+.rarity-pill{font-family:'Oswald';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;border-radius:7px}
+.pill-common{background:rgba(255,255,255,.08);color:var(--muted)}
+.pill-rare{background:rgba(199,208,219,.16);color:var(--silver)}
+.pill-legendary{background:rgba(245,196,81,.18);color:var(--gold-hi)}
+
+/* ---------- OVERLAYS ---------- */
+.overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  background:rgba(5,8,16,.92);backdrop-filter:blur(6px);padding:20px}
+.overlay.show{display:flex}
+.sheet{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);
+  border-radius:20px;box-shadow:var(--shadow);padding:22px;position:relative}
+.sheet h3{font-family:'Oswald';font-weight:700;font-size:18px;margin:0 0 4px}
+.sheet p{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.5}
+.sheet .row{display:flex;flex-direction:column;gap:10px}
+.btn-ghost{font-family:'Inter';font-weight:600;font-size:14px;border:1px solid var(--line);
+  background:var(--panel-2);color:var(--text);border-radius:12px;padding:13px 16px;cursor:pointer;
+  text-align:left;display:flex;align-items:center;gap:10px;transition:.18s}
+.btn-ghost:hover{border-color:var(--gold);background:#212a48}
+.btn-ghost .e{font-size:18px}
+.btn-ghost small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:1px}
+.close-x{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
+  background:var(--panel-2);color:var(--text);cursor:pointer;font-size:16px}
+.note{font-size:11px;color:var(--muted);margin-top:14px;line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+textarea{width:100%;min-height:84px;background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-family:monospace;font-size:11px;padding:10px;resize:vertical}
+
+/* ---------- PACK OPENING ---------- */
+#packOverlay{background:radial-gradient(80% 60% at 50% 40%, #0d1428, #050810 80%)}
+.pack-stage{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative}
+.beam{position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:520px;height:620px;
+  opacity:0;transition:opacity .5s;pointer-events:none;z-index:0;
+  background:radial-gradient(closest-side, var(--beamc,rgba(245,196,81,.55)), transparent 70%);
+  filter:blur(2px)}
+.beam.on{opacity:1;animation:beamPulse 2.2s ease-in-out infinite}
+@keyframes beamPulse{0%,100%{opacity:.7}50%{opacity:1}}
+
+.bigpack{width:200px;height:280px;cursor:pointer;position:relative;z-index:2;
+  transition:transform .3s;animation:floaty 3s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bigpack.shake{animation:shakeit .5s linear}
+@keyframes shakeit{0%,100%{transform:translate(0,0) rotate(0)}
+  20%{transform:translate(-6px,2px) rotate(-2deg)}40%{transform:translate(6px,-2px) rotate(2deg)}
+  60%{transform:translate(-5px,1px) rotate(-1.5deg)}80%{transform:translate(5px,-1px) rotate(1.5deg)}}
+.bigpack .art{width:100%;height:100%;border-radius:18px;overflow:hidden;position:relative;
+  background:linear-gradient(160deg,#222c52,#0c1226);border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 30px 70px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.1);display:grid;place-items:center}
+.bigpack .art .logo{font-family:'Oswald';font-weight:700;letter-spacing:.16em;font-size:18px;color:var(--gold-hi);
+  text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.6);z-index:2}
+.bigpack .art .logo small{display:block;font-family:'Caveat';font-size:24px;letter-spacing:0;color:var(--rose-hi);margin-top:4px}
+.bigpack .art .glow{position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 16%,rgba(245,196,81,.55),transparent 70%);mix-blend-mode:screen}
+.tap-hint{font-family:'Oswald';font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--muted);z-index:2}
+
+.flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:120}
+.flash.go{animation:flashAnim .55s ease-out}
+@keyframes flashAnim{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
+
+/* revealed card */
+.reveal-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px}
+.reveal-card{width:230px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;position:relative;
+  box-shadow:0 26px 60px rgba(0,0,0,.6);transform:translateY(40px) scale(.9);opacity:0}
+.reveal-card.in{animation:walkout .7s cubic-bezier(.2,.9,.2,1) forwards}
+@keyframes walkout{to{transform:translateY(0) scale(1);opacity:1}}
+.reveal-card img{width:100%;height:100%;object-fit:cover}
+.reveal-card .rframe{position:absolute;inset:0;border-radius:16px;pointer-events:none}
+.reveal-card.common .rframe{border:2px solid rgba(255,255,255,.18)}
+.reveal-card.rare .rframe{border:2px solid var(--silver);box-shadow:inset 0 0 30px rgba(199,208,219,.4)}
+.reveal-card.legendary .rframe{border:2px solid var(--gold);box-shadow:inset 0 0 36px rgba(245,196,81,.55)}
+.reveal-card .rnum{position:absolute;top:9px;left:10px;font-family:'Oswald';font-weight:700;font-size:14px;text-shadow:0 1px 5px rgba(0,0,0,.9)}
+.reveal-card .rnew{position:absolute;top:9px;right:9px;font-family:'Oswald';font-weight:700;font-size:11px;letter-spacing:.08em;
+  color:#fff;background:var(--rose);padding:3px 7px;border-radius:7px;box-shadow:0 4px 12px rgba(255,94,126,.5)}
+.reveal-card .rdup{position:absolute;bottom:9px;right:10px;font-family:'Oswald';font-weight:700;font-size:14px;color:#1a1205;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));padding:2px 9px;border-radius:8px}
+.reveal-meta{text-align:center}
+.reveal-meta .rt{font-family:'Oswald';font-weight:700;font-size:18px}
+.reveal-meta .rs{font-size:12px;color:var(--muted);margin-top:2px}
+.reveal-progress{font-family:'Oswald';font-size:12px;color:var(--muted);letter-spacing:.1em}
+.sparkles{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+
+/* ---------- COMPLETION COUPON ---------- */
+#winOverlay{background:radial-gradient(70% 60% at 50% 35%, #1b1430, #050810 80%)}
+.coupon{width:100%;max-width:360px;border-radius:20px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#2a2008,#3a2c0a);border:2px solid var(--gold);
+  box-shadow:0 30px 80px rgba(245,196,81,.35);padding:28px 24px;text-align:center;
+  transform:scale(.85);opacity:0;animation:pop .6s cubic-bezier(.2,.9,.2,1) .2s forwards}
+@keyframes pop{to{transform:scale(1);opacity:1}}
+.coupon .holo{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);
+  background-size:300% 300%;animation:holo 3s linear infinite}
+.coupon .ttl{font-family:'Oswald';font-weight:700;letter-spacing:.2em;font-size:13px;color:var(--gold-hi);text-transform:uppercase;position:relative}
+.coupon .amount{font-family:'Oswald';font-weight:700;font-size:74px;line-height:1;color:#fff;margin:8px 0;
+  text-shadow:0 4px 24px rgba(245,196,81,.6);position:relative}
+.coupon .amount span{font-size:40px;vertical-align:super}
+.coupon .for{font-family:'Caveat';font-weight:700;font-size:26px;color:var(--rose-hi);position:relative}
+.coupon .dash{border-top:1px dashed rgba(245,196,81,.5);margin:16px 0;position:relative}
+.coupon .msg{font-size:13px;color:#e9d9a8;line-height:1.5;position:relative}
+.win-title{font-family:'Caveat';font-weight:700;font-size:38px;text-align:center;margin-bottom:6px;color:#fff}
+.win-sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:18px}
+
+/* confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:130;overflow:hidden}
+.confetti i{position:absolute;top:-14px;width:9px;height:14px;opacity:.95;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);z-index:200;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:12px 18px;border-radius:12px;
+  font-size:13px;font-weight:500;box-shadow:var(--shadow);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- ALBUM BOOK ---------- */
+.nav-hint{font-family:'Oswald';font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.8}
+.book{position:relative;perspective:2000px;margin:8px auto 14px;max-width:560px}
+.book-stage{position:relative;border-radius:18px}
+.book-page{position:relative;z-index:1}
+.book-flip{position:absolute;inset:0;z-index:5;transform-origin:left center;transform:rotateY(0deg);
+  will-change:transform;display:none;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.book-flip.show{display:block}
+.flip-inner{position:relative;height:100%}
+.flip-shade{position:absolute;inset:0;border-radius:16px;opacity:0;pointer-events:none;
+  background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,0) 100%)}
+
+.leaf{position:relative;border-radius:16px;padding:18px 15px 20px 20px;overflow:hidden;
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(245,196,81,.07), transparent 58%),
+    linear-gradient(180deg,#161d33,#10172a);
+  border:1px solid rgba(245,196,81,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 22px 50px rgba(0,0,0,.5)}
+.leaf::before{content:"";position:absolute;left:0;top:0;bottom:0;width:16px;
+  background:linear-gradient(90deg, rgba(0,0,0,.5), rgba(0,0,0,0));
+  border-top-left-radius:16px;border-bottom-left-radius:16px;pointer-events:none}
+.leaf-head{margin:0 0 14px;padding-left:6px}
+.leaf-head .eyebrow{font-family:'Oswald';font-weight:600;letter-spacing:.22em;font-size:10px;
+  text-transform:uppercase;color:var(--gold)}
+.leaf-head .leaf-title{font-family:'Caveat';font-weight:700;font-size:36px;line-height:.95;margin-top:1px;color:var(--text)}
+.leaf-head .leaf-sub{font-family:'Oswald';font-weight:500;font-size:12px;color:var(--muted);margin-top:5px;letter-spacing:.05em}
+.leaf-head .leaf-sub b{color:var(--ok)}
+.leaf-head .leaf-divider{height:2px;margin-top:12px;border-radius:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(245,196,81,0) 80%)}
+
+/* empty sticker slot */
+.card.slot{background:rgba(255,255,255,.02);border:1.5px dashed rgba(245,196,81,.32);
+  display:grid;place-items:center;box-shadow:inset 0 2px 12px rgba(0,0,0,.3)}
+.card.slot .slotnum{font-family:'Oswald';font-weight:700;font-size:24px;color:rgba(245,196,81,.34)}
+.card.slot::after{content:"";position:absolute;inset:5px;border-radius:9px;border:1px solid rgba(255,255,255,.04)}
+
+/* cover */
+.leaf.cover{min-height:430px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 24px;
+  background:
+    radial-gradient(100% 60% at 50% 18%, rgba(245,196,81,.14), transparent 60%),
+    linear-gradient(180deg,#1b2238,#0d1426);
+  border:1px solid rgba(245,196,81,.4)}
+.leaf.cover::before{display:none}
+.cover-deco{position:absolute;inset:12px;border:1px solid rgba(245,196,81,.28);border-radius:13px;pointer-events:none}
+.cover-deco::before,.cover-deco::after{content:"";position:absolute;width:26px;height:26px;border:2px solid var(--gold);opacity:.7}
+.cover-deco::before{top:-1px;left:-1px;border-right:0;border-bottom:0;border-top-left-radius:13px}
+.cover-deco::after{bottom:-1px;right:-1px;border-left:0;border-top:0;border-bottom-right-radius:13px}
+.cover-emblem{font-size:32px;color:var(--rose);filter:drop-shadow(0 4px 12px rgba(255,94,126,.45))}
+.cover-kicker{font-family:'Oswald';letter-spacing:.3em;font-size:11px;text-transform:uppercase;color:var(--gold);margin-top:12px}
+.cover-title{font-family:'Caveat';font-weight:700;font-size:60px;line-height:.92;margin:8px 0 0;color:var(--text)}
+.cover-title b{color:var(--rose-hi)}
+.cover-line{width:64px;height:2px;background:linear-gradient(90deg,var(--gold),var(--rose));margin:16px 0 14px;border-radius:2px}
+.cover-sub{font-family:'Oswald';font-weight:500;font-size:12px;letter-spacing:.12em;color:var(--muted)}
+.cover-hint{margin-top:26px;font-family:'Oswald';font-weight:600;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);animation:nudge 1.8s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+
+.book-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  max-width:560px;margin:4px auto 8px}
+.book-nav button{font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.03em;
+  border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;
+  padding:11px 15px;cursor:pointer;transition:.18s}
+.book-nav button:hover:not(:disabled){border-color:var(--gold);background:var(--panel-2)}
+.book-nav button:disabled{opacity:.32;cursor:default}
+.book-ind{font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.04em;color:var(--text);text-align:center;flex:1}
+.book-dots{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:0 0 6px}
+.book-dots .d{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16);cursor:pointer;transition:.2s}
+.book-dots .d.full{background:var(--ok)}
+.book-dots .d.active{background:linear-gradient(180deg,var(--gold-hi),var(--gold));transform:scale(1.25);box-shadow:0 0 8px rgba(245,196,81,.5)}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important;animation-iteration-count:1 !important}
+}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="head-row">
+      <div class="brand">
+        <span class="kicker">Collection · Coupe du Cœur</span>
+        <span class="title">L'album de <b>Tam</b></span>
+      </div>
+      <button class="icon-btn" id="menuBtn" aria-label="Menu et sauvegarde">⚙️</button>
+    </div>
+    <div class="head-progress">
+      <div class="bar"><span id="globalBar"></span></div>
+      <div class="meta"><span>Album complété</span><span><b id="globalCount">0</b> / 118</span></div>
+    </div>
+  </header>
+
+  <div class="reward" id="rewardBanner">
+    <span class="coin">🎁</span>
+    <div class="rtext">
+      <div class="t1" id="rewardT1">Complète l'album à 100 %</div>
+      <div class="t2" id="rewardT2">…et débloque ta récompense surprise 💛</div>
+    </div>
+    <span class="chip">100€</span>
+  </div>
+
+  <section class="hub">
+    <div class="pack-mini" id="hubPack">
+      <div class="pack-art">
+        <span class="glow"></span><span class="seam"></span>
+        <span class="logo">PACK<small>du jour</small></span>
+      </div>
+    </div>
+    <h2 id="hubTitle">Ton pack du jour t'attend</h2>
+    <p class="sub" id="hubSub">2 cartes à coller dans l'album ✨</p>
+    <div id="hubAction"></div>
+  </section>
+
+  <div class="nav-title"><h3>L'album</h3><span class="nav-hint">tourne les pages →</span></div>
+
+  <div class="book" id="book">
+    <div class="book-stage">
+      <div class="book-page" id="bookPage"></div>
+      <div class="book-flip" id="bookFlip">
+        <div class="flip-inner" id="flipInner"></div>
+        <div class="flip-shade" id="flipShade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-nav">
+    <button id="prevPage">‹ Précédent</button>
+    <span class="book-ind" id="bookInd">Couverture</span>
+    <button id="nextPage">Suivant ›</button>
+  </div>
+  <div class="book-dots" id="bookDots"></div>
+</div>
+
+<!-- MENU / SAVE -->
+<div class="overlay" id="menuOverlay">
+  <div class="sheet">
+    <button class="close-x" data-close="menuOverlay">✕</button>
+    <h3>Sauvegarde & réglages</h3>
+    <p>Ta collection est enregistrée dans ce navigateur. Garde une sauvegarde au cas où tu changes de téléphone.</p>
+    <div class="row">
+      <button class="btn-ghost" id="saveFileBtn"><span class="e">💾</span><span><b>Sauvegarder ma collection</b><small>Télécharge un fichier de secours</small></span></button>
+      <button class="btn-ghost" id="restoreBtn"><span class="e">♻️</span><span><b>Restaurer une sauvegarde</b><small>Recharge un fichier sauvegardé</small></span></button>
+      <button class="btn-ghost" id="codeBtn"><span class="e">🔑</span><span><b>Code de sauvegarde</b><small>Copier / coller un code texte</small></span></button>
+      <button class="btn-ghost" id="testBtn"><span class="e">🔧</span><span><b>Réinitialiser le minuteur (test)</b><small>À retirer avant d'offrir</small></span></button>
+    </div>
+    <input type="file" id="fileInput" accept="application/json,.json,.txt" class="hidden" />
+    <div class="note">Astuce : toi aussi, garde une copie du fichier de ton côté. Si quelque chose se perd, tu pourras tout restaurer.</div>
+  </div>
+</div>
+
+<!-- CODE -->
+<div class="overlay" id="codeOverlay">
+  <div class="sheet">
+    <button class="close-x" data-close="codeOverlay">✕</button>
+    <h3>Code de sauvegarde</h3>
+    <p>Copie ce code et garde-le précieusement. Pour restaurer, colle un code ici puis touche « Restaurer ce code ».</p>
+    <textarea id="codeArea" spellcheck="false"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn-ghost" id="copyCodeBtn"><span class="e">📋</span><span><b>Copier le code</b></span></button>
+      <button class="btn-ghost" id="applyCodeBtn"><span class="e">✅</span><span><b>Restaurer ce code</b></span></button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD DETAIL -->
+<div class="overlay" id="cardOverlay">
+  <div class="sheet" style="max-width:300px;text-align:center">
+    <button class="close-x" data-close="cardOverlay">✕</button>
+    <div id="cardDetail"></div>
+  </div>
+</div>
+
+<!-- PACK OPENING -->
+<div class="overlay" id="packOverlay">
+  <div class="pack-stage">
+    <div class="beam" id="beam"></div>
+    <div id="packPhase"></div>
+  </div>
+</div>
+
+<!-- WIN -->
+<div class="overlay" id="winOverlay">
+  <div style="width:100%;max-width:380px">
+    <div class="win-title">Bravo Tamara ! 💛</div>
+    <div class="win-sub">Tu as complété tout l'album. Voici ta récompense :</div>
+    <div class="coupon">
+      <div class="holo"></div>
+      <div class="ttl">Bon d'achat</div>
+      <div class="amount"><span>€</span>100</div>
+      <div class="for">rien que pour toi</div>
+      <div class="dash"></div>
+      <div class="msg">Merci d'avoir collé chaque souvenir, une carte à la fois. Je t'aime. ❤️</div>
+    </div>
+    <div style="text-align:center;margin-top:18px">
+      <button class="btn" data-close="winOverlay">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="flash" id="flash"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ============ CONFIG ============ */
+const PAGES = [
+  { id:"super-rare",  name:"Super Rares",  count:3  },
+  { id:"egypte",      name:"Égypte",       count:20 },
+  { id:"portugal",    name:"Portugal",     count:20 },
+  { id:"montenegro",  name:"Monténégro",   count:20 },
+  { id:"miam",        name:"Miam",         count:20 },
+  { id:"sieste",      name:"Sieste",       count:10 },
+  { id:"grosse-tete", name:"Grosse tête",  count:20 },
+  { id:"bonus",       name:"Bonus",        count:5  },
+];
+const TOTAL = PAGES.reduce((a,p)=>a+p.count,0); // 118
+const COOLDOWN = 24*60*60*1000; // 24h
+const CARDS_PER_PACK = 2;
+const STORE_KEY = "album_de_tam_v1";
+
+/* Tirage — profil "Confort" (~2 mois ¼) */
+const TIER_PROB = { legendary:0.04, rare:0.20, common:0.76 };
+const P_NEW_BASE = 0.68;        // calibré (simulation) → ~2 mois ⅓, ~24 doublons
+const PITY_FROM = 0.97;         // au-delà de 97% collecté → toujours neuf (coup de pouce final)
+
+/* ============ DETERMINISTIC RARITY ============ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function buildCards(){
+  const rng=mulberry32(20260616); // seed fixe → rareté stable
+  const cards=[];
+  PAGES.forEach(p=>{
+    for(let n=1;n<=p.count;n++){
+      let rarity="common";
+      if(p.id==="super-rare") rarity="legendary";
+      cards.push({uid:p.id+"-"+n, pageId:p.id, pageName:p.name, num:n, rarity});
+    }
+  });
+  // ~14% des cartes non-légendaires deviennent "rare" (réparti automatiquement)
+  cards.forEach(c=>{ if(c.rarity==="common" && rng()<0.14) c.rarity="rare"; });
+  return cards;
+}
+const CARDS = buildCards();
+const BY_UID = Object.fromEntries(CARDS.map(c=>[c.uid,c]));
+const RARITY_LABEL={common:"Commune",rare:"Rare",legendary:"Super rare"};
+const RARITY_PILL ={common:"pill-common",rare:"pill-rare",legendary:"pill-legendary"};
+const BEAM_COLOR  ={common:"rgba(120,140,180,.45)",rare:"rgba(199,208,219,.55)",legendary:"rgba(245,196,81,.65)"};
+
+/* ============ STATE ============ */
+let state = load();
+function load(){
+  try{ const r=JSON.parse(localStorage.getItem(STORE_KEY)); if(r&&r.owned) return r; }catch(e){}
+  return { v:1, owned:{}, lastOpen:null, started:Date.now(), celebrated:false };
+}
+function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }catch(e){} }
+function ownedUniques(){ return Object.keys(state.owned).filter(k=>state.owned[k]>0).length; }
+function hasCard(uid){ return (state.owned[uid]||0)>0; }
+function pageOwned(pid){ return CARDS.filter(c=>c.pageId===pid&&hasCard(c.uid)).length; }
+function canOpen(){ return !state.lastOpen || (Date.now()-state.lastOpen)>=COOLDOWN; }
+
+/* ============ DRAW ENGINE ============ */
+function pickTier(){
+  const r=Math.random();
+  if(r<TIER_PROB.legendary) return "legendary";
+  if(r<TIER_PROB.legendary+TIER_PROB.rare) return "rare";
+  return "common";
+}
+const tierCards = t=>CARDS.filter(c=>c.rarity===t);
+function drawOne(){
+  const frac=ownedUniques()/TOTAL;
+  let pNew=P_NEW_BASE;
+  if(frac>=PITY_FROM) pNew=1; // coup de pouce final
+  const wantNew=Math.random()<pNew;
+  let tier=pickTier();
+  if(wantNew){
+    let pool=tierCards(tier).filter(c=>!hasCard(c.uid));
+    if(pool.length===0) pool=CARDS.filter(c=>!hasCard(c.uid)); // autre tier neuf
+    if(pool.length===0) pool=CARDS; // tout possédé
+    return pool[Math.floor(Math.random()*pool.length)];
+  }else{
+    let pool=tierCards(tier);
+    if(pool.length===0) pool=CARDS;
+    return pool[Math.floor(Math.random()*pool.length)];
+  }
+}
+function drawPack(){
+  const out=[];
+  for(let i=0;i<CARDS_PER_PACK;i++){
+    let c=drawOne(), guard=0;
+    while(out.length && out[out.length-1].uid===c.uid && guard<8){ c=drawOne(); guard++; }
+    const isNew=!hasCard(c.uid);
+    state.owned[c.uid]=(state.owned[c.uid]||0)+1;
+    out.push({card:c, isNew, copies:state.owned[c.uid]});
+  }
+  state.lastOpen=Date.now();
+  save();
+  return out;
+}
+
+/* ============ RENDER ============ */
+/* book = couverture (index 0) + 8 pages thèmes */
+const BOOK = [{type:"cover"}].concat(PAGES.map(p=>({type:"page",page:p})));
+let bookIdx = 0;           // démarre sur la couverture
+let turning = false;
+const reduceMotion = ()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = s=>document.querySelector(s);
+
+function renderGlobal(){
+  const u=ownedUniques();
+  $("#globalCount").textContent=u;
+  $("#globalBar").style.width=(u/TOTAL*100)+"%";
+  const done=u>=TOTAL;
+  const rb=$("#rewardBanner");
+  if(done){
+    rb.classList.add("done");
+    $("#rewardT1").textContent="Album complété à 100 % 🎉";
+    $("#rewardT2").textContent="Touche ici pour revoir ta récompense";
+  }else{
+    $("#rewardT1").textContent="Complète l'album à 100 %";
+    $("#rewardT2").textContent=(TOTAL-u)+" cartes avant le bon de 100 € 💛";
+  }
+}
+function renderHub(){
+  const action=$("#hubAction");
+  if(canOpen()){
+    $("#hubTitle").textContent= state.lastOpen ? "Ton pack du jour est prêt !" : "Bienvenue, ton 1ᵉʳ pack t'attend";
+    $("#hubSub").textContent="2 cartes à coller dans l'album ✨";
+    action.innerHTML='<button class="btn" id="openBtn">Ouvrir le pack</button>';
+    $("#openBtn").onclick=startOpening;
+    $("#hubPack").style.pointerEvents="auto";
+    $("#hubPack").onclick=startOpening;
+  }else{
+    $("#hubTitle").textContent="Reviens vite 💛";
+    $("#hubSub").textContent="Un nouveau pack chaque jour.";
+    action.innerHTML='<div class="countdown" id="cd">--:--:--<small>Prochain pack dans</small></div>';
+    $("#hubPack").style.pointerEvents="none";
+    tickCountdown();
+  }
+}
+let cdTimer=null;
+function tickCountdown(){
+  clearInterval(cdTimer);
+  const el=()=>document.getElementById("cd");
+  const upd=()=>{
+    const left=COOLDOWN-(Date.now()-state.lastOpen);
+    if(left<=0){ clearInterval(cdTimer); renderHub(); return; }
+    const h=Math.floor(left/3.6e6), m=Math.floor(left%3.6e6/6e4), s=Math.floor(left%6e4/1000);
+    const node=el(); if(node) node.firstChild.textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  };
+  upd(); cdTimer=setInterval(upd,1000);
+}
+function slotsHTML(page){
+  return `<div class="grid">`+CARDS.filter(c=>c.pageId===page.id).map(c=>{
+    const owned=hasCard(c.uid), copies=state.owned[c.uid]||0;
+    if(owned){
+      return `<div class="card ${c.rarity}" data-uid="${c.uid}">
+        <span class="num">${c.num}</span>${imgTag(c)}<div class="frame"></div>
+        ${copies>1?`<span class="dup">×${copies}</span>`:""}</div>`;
+    }
+    return `<div class="card slot" data-uid="${c.uid}"><span class="slotnum">${c.num}</span></div>`;
+  }).join("")+`</div>`;
+}
+function coverHTML(){
+  const u=ownedUniques();
+  return `<div class="leaf cover">
+    <div class="cover-deco"></div>
+    <div class="cover-emblem">❤</div>
+    <div class="cover-kicker">Coupe du Cœur · 2026</div>
+    <div class="cover-title">L'album<br><b>de Tam</b></div>
+    <div class="cover-line"></div>
+    <div class="cover-sub">${u} / ${TOTAL} souvenirs collés</div>
+    <div class="cover-hint">Tourne la page →</div>
+  </div>`;
+}
+function leafHTML(i){
+  const b=BOOK[i];
+  if(b.type==="cover") return coverHTML();
+  const p=b.page, o=pageOwned(p.id), full=o>=p.count;
+  return `<div class="leaf">
+    <div class="leaf-head">
+      <div class="eyebrow">Page ${String(i).padStart(2,"0")} / 08${p.id==="super-rare"?" · ⭐ Légendaires":""}</div>
+      <div class="leaf-title">${p.name}</div>
+      <div class="leaf-sub">${o} / ${p.count} collées${full?" · <b>complète ✓</b>":""}</div>
+      <div class="leaf-divider"></div>
+    </div>
+    ${slotsHTML(p)}
+  </div>`;
+}
+function paintRest(){ $("#bookPage").innerHTML=leafHTML(bookIdx); updateInd(); }
+function updateInd(){
+  const b=BOOK[bookIdx];
+  $("#bookInd").textContent = b.type==="cover" ? "Couverture" : b.page.name;
+  $("#prevPage").disabled = bookIdx<=0;
+  $("#nextPage").disabled = bookIdx>=BOOK.length-1;
+  const dots=$("#bookDots"); dots.innerHTML="";
+  BOOK.forEach((bb,i)=>{
+    const d=document.createElement("span");
+    let cls="d"+(i===bookIdx?" active":"");
+    if(bb.type==="page" && pageOwned(bb.page.id)>=bb.page.count) cls+=" full";
+    d.className=cls;
+    d.title = bb.type==="cover"?"Couverture":bb.page.name;
+    d.onclick=()=>goToPage(i);
+    dots.appendChild(d);
+  });
+}
+function goToPage(target, animate=true){
+  target=Math.max(0,Math.min(BOOK.length-1,target));
+  if(turning || target===bookIdx) return;
+  const dir = target>bookIdx ? 1 : -1;
+  if(!animate || reduceMotion()){ bookIdx=target; paintRest(); return; }
+  turning=true;
+  const oldIdx=bookIdx;
+  const flip=$("#bookFlip"), inner=$("#flipInner"), shade=$("#flipShade");
+  if(dir>0){
+    bookIdx=target; $("#bookPage").innerHTML=leafHTML(bookIdx);   // destination dessous
+    inner.innerHTML=leafHTML(oldIdx);                              // page sortante qui tourne
+    flip.style.transition="none"; flip.style.transform="rotateY(0deg)"; shade.style.opacity="0";
+  }else{
+    $("#bookPage").innerHTML=leafHTML(oldIdx);                     // ancienne page dessous
+    inner.innerHTML=leafHTML(target);                             // page entrante
+    flip.style.transition="none"; flip.style.transform="rotateY(-168deg)"; shade.style.opacity=".5";
+    bookIdx=target;
+  }
+  flip.classList.add("show");
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+    flip.style.transition="transform .64s cubic-bezier(.3,.6,.25,1)";
+    shade.style.transition="opacity .64s ease";
+    flip.style.transform = dir>0 ? "rotateY(-168deg)" : "rotateY(0deg)";
+    shade.style.opacity = dir>0 ? ".5" : "0";
+  });});
+  const done=(e)=>{
+    if(e.propertyName!=="transform") return;
+    flip.removeEventListener("transitionend",done);
+    flip.classList.remove("show"); flip.style.transition="none";
+    flip.style.transform="rotateY(0deg)"; inner.innerHTML="";
+    $("#bookPage").innerHTML=leafHTML(bookIdx);
+    turning=false; updateInd();
+  };
+  flip.addEventListener("transitionend",done);
+  updateInd();
+}
+function initBook(){
+  $("#prevPage").onclick=()=>goToPage(bookIdx-1);
+  $("#nextPage").onclick=()=>goToPage(bookIdx+1);
+  const book=$("#book"); let sx=null,sy=null;
+  book.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  book.addEventListener("touchend",e=>{
+    if(sx==null)return;
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.4) goToPage(bookIdx+(dx<0?1:-1));
+    sx=null;sy=null;
+  });
+  $("#bookPage").addEventListener("click",e=>{
+    if(turning)return;
+    const card=e.target.closest(".card"); if(!card)return;
+    const c=BY_UID[card.dataset.uid]; if(!c)return;
+    if(hasCard(c.uid)) openCard(c); else toast("Carte n°"+c.num+" pas encore collée");
+  });
+}
+function imgTag(c){
+  return `<img src="images/${c.pageId}/${c.num}.jpg" alt="" loading="lazy"
+    onerror="this.style.display='none';this.parentNode.classList.add('noimg')">`;
+}
+/* (rendu de page géré par le livre : leafHTML / paintRest) */
+function openCard(c){
+  const copies=state.owned[c.uid]||0;
+  $("#cardDetail").innerHTML=`
+    <div class="card ${c.rarity}" style="width:160px;margin:6px auto 14px;aspect-ratio:3/4">
+      <span class="num">${c.num}</span>${imgTag(c)}<div class="frame"></div>
+      ${copies>1?`<span class="dup">×${copies}</span>`:""}
+    </div>
+    <div style="font-family:'Oswald';font-weight:700;font-size:16px">${c.pageName} · n°${c.num}</div>
+    <div style="margin:8px 0 4px"><span class="rarity-pill ${RARITY_PILL[c.rarity]}">${RARITY_LABEL[c.rarity]}</span></div>
+    <div style="color:var(--muted);font-size:12px">${copies>1?("Tu l'as eue "+copies+" fois"):"Pièce unique de ta collection"}</div>`;
+  show("cardOverlay");
+}
+
+/* ============ PACK OPENING FLOW ============ */
+let pendingPack=null, revealIdx=0;
+function startOpening(){
+  if(!canOpen()) return;
+  pendingPack=drawPack();
+  revealIdx=0;
+  const ph=$("#packPhase");
+  $("#beam").classList.remove("on");
+  ph.innerHTML=`
+    <div class="bigpack" id="bigpack">
+      <div class="art"><span class="glow"></span>
+        <span class="logo">PACK DU JOUR<small>pour Tam</small></span>
+      </div>
+    </div>
+    <div class="tap-hint">Tape le pack pour l'ouvrir</div>`;
+  show("packOverlay");
+  $("#bigpack").onclick=tearPack;
+}
+function tearPack(){
+  const bp=$("#bigpack"); if(!bp) return;
+  bp.onclick=null; bp.classList.add("shake");
+  const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
+  setTimeout(showReveal,520);
+}
+function showReveal(){
+  const item=pendingPack[revealIdx];
+  const c=item.card;
+  const beam=$("#beam");
+  beam.style.setProperty("--beamc",BEAM_COLOR[c.rarity]);
+  beam.classList.add("on");
+  const ph=$("#packPhase");
+  ph.innerHTML=`
+    <div class="reveal-wrap">
+      <div class="reveal-card ${c.rarity}" id="rc">
+        ${imgTag(c)}<div class="rframe"></div>
+        <span class="rnum">${c.num}</span>
+        ${item.isNew?'<span class="rnew">NEW</span>':`<span class="rdup">×${item.copies}</span>`}
+        <div class="sparkles" id="sp"></div>
+      </div>
+      <div class="reveal-meta">
+        <div class="rt">${c.pageName} · n°${c.num}</div>
+        <div class="rs"><span class="rarity-pill ${RARITY_PILL[c.rarity]}">${RARITY_LABEL[c.rarity]}</span>
+          &nbsp; ${item.isNew?'Nouvelle carte !':'Doublon — collé en double'}</div>
+      </div>
+      <div class="reveal-progress">${revealIdx+1} / ${pendingPack.length} · tape pour continuer</div>
+    </div>`;
+  requestAnimationFrame(()=>$("#rc").classList.add("in"));
+  if(c.rarity==="legendary") burst($("#sp"));
+  const adv=()=>{ ph.onclick=null; nextReveal(); };
+  ph.onclick=adv;
+}
+function nextReveal(){
+  revealIdx++;
+  $("#beam").classList.remove("on");
+  if(revealIdx<pendingPack.length){ setTimeout(showReveal,120); }
+  else finishPack();
+}
+function finishPack(){
+  const newCount=pendingPack.filter(i=>i.isNew).length;
+  const ph=$("#packPhase");
+  ph.innerHTML=`
+    <div class="reveal-wrap">
+      <div style="font-family:'Oswald';font-weight:700;font-size:22px;text-align:center">
+        ${newCount>0?`+${newCount} carte${newCount>1?"s":""} dans l'album ✨`:"Deux doublons cette fois 😅"}
+      </div>
+      <div style="color:var(--muted);font-size:13px;text-align:center;max-width:280px">
+        ${newCount>0?"Elles sont déjà collées au bon endroit.":"Pas de chance ! Reviens demain pour de nouvelles cartes."}
+      </div>
+      <button class="btn" id="toAlbum">Voir l'album</button>
+    </div>`;
+  $("#toAlbum").onclick=()=>{
+    const lastPid=pendingPack[pendingPack.length-1].card.pageId;
+    const bi=BOOK.findIndex(b=>b.type==="page"&&b.page.id===lastPid);
+    if(bi>0) bookIdx=bi;
+    hide("packOverlay");
+    renderAll();
+    if(ownedUniques()>=TOTAL && !state.celebrated){ state.celebrated=true; save(); setTimeout(celebrate,400); }
+  };
+  renderGlobal();
+}
+
+/* sparkles for legendary */
+function burst(host){
+  if(!host) return;
+  for(let i=0;i<18;i++){
+    const s=document.createElement("span");
+    const x=50+(Math.random()*80-40), y=50+(Math.random()*80-40);
+    s.style.cssText=`position:absolute;left:${x}%;top:${y}%;width:6px;height:6px;border-radius:50%;
+      background:var(--gold-hi);box-shadow:0 0 8px var(--gold);opacity:0;
+      animation:spk .9s ease-out ${Math.random()*.4}s forwards`;
+    host.appendChild(s);
+  }
+}
+const styleSpk=document.createElement("style");
+styleSpk.textContent="@keyframes spk{0%{transform:scale(0);opacity:0}40%{opacity:1}100%{transform:scale(1.6) translateY(-12px);opacity:0}}";
+document.head.appendChild(styleSpk);
+
+/* ============ COMPLETION ============ */
+function celebrate(){ show("winOverlay"); confetti(); }
+function confetti(){
+  const wrap=document.createElement("div"); wrap.className="confetti";
+  const colors=["#F5C451","#FFE08A","#FF5E7E","#FF8FA8","#EAF0FF","#5BD6A0"];
+  for(let i=0;i<120;i++){
+    const c=document.createElement("i");
+    c.style.left=Math.random()*100+"%";
+    c.style.background=colors[i%colors.length];
+    c.style.animationDuration=(2.4+Math.random()*2)+"s";
+    c.style.animationDelay=(Math.random()*1.2)+"s";
+    c.style.transform="rotate("+Math.random()*360+"deg)";
+    wrap.appendChild(c);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(()=>wrap.remove(),6000);
+}
+
+/* ============ SAVE / RESTORE ============ */
+function exportCode(){ return btoa(unescape(encodeURIComponent(JSON.stringify(state)))); }
+function downloadSave(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="album-de-tam-sauvegarde.json";
+  a.click(); URL.revokeObjectURL(a.href);
+  toast("Sauvegarde téléchargée 💾");
+}
+function applyData(obj){
+  if(!obj||typeof obj!=="object"||!obj.owned){ toast("Fichier invalide ✕"); return; }
+  state=Object.assign({v:1,owned:{},lastOpen:null,started:Date.now(),celebrated:false},obj);
+  save(); renderAll(); toast("Collection restaurée ♻️");
+}
+function readFile(file){
+  const fr=new FileReader();
+  fr.onload=()=>{ let txt=fr.result.trim();
+    try{ applyData(JSON.parse(txt)); }
+    catch(e){ try{ applyData(JSON.parse(decodeURIComponent(escape(atob(txt))))); }catch(e2){ toast("Lecture impossible ✕"); } }
+  };
+  fr.readAsText(file);
+}
+
+/* ============ UI WIRING ============ */
+function show(id){ document.getElementById(id).classList.add("show"); }
+function hide(id){ document.getElementById(id).classList.remove("show"); }
+let toastTimer=null;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2200); }
+
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>hide(b.dataset.close));
+$("#menuBtn").onclick=()=>show("menuOverlay");
+$("#rewardBanner").onclick=()=>{ if(ownedUniques()>=TOTAL) celebrate(); else toast("Encore "+(TOTAL-ownedUniques())+" cartes 💪"); };
+$("#saveFileBtn").onclick=downloadSave;
+$("#restoreBtn").onclick=()=>$("#fileInput").click();
+$("#fileInput").onchange=e=>{ if(e.target.files[0]) readFile(e.target.files[0]); e.target.value=""; };
+$("#codeBtn").onclick=()=>{ $("#codeArea").value=exportCode(); hide("menuOverlay"); show("codeOverlay"); };
+$("#copyCodeBtn").onclick=()=>{ const a=$("#codeArea"); a.select();
+  navigator.clipboard?.writeText(a.value).then(()=>toast("Code copié 📋")).catch(()=>{document.execCommand("copy");toast("Code copié 📋")}); };
+$("#applyCodeBtn").onclick=()=>{ const v=$("#codeArea").value.trim(); if(!v){toast("Colle un code d'abord");return;}
+  try{ applyData(JSON.parse(decodeURIComponent(escape(atob(v))))); hide("codeOverlay"); }
+  catch(e){ try{ applyData(JSON.parse(v)); hide("codeOverlay"); }catch(e2){ toast("Code invalide ✕"); } } };
+$("#testBtn").onclick=()=>{ state.lastOpen=null; save(); hide("menuOverlay"); renderAll(); toast("Minuteur réinitialisé 🔧"); };
+
+/* close overlay on backdrop tap (except pack reveal) */
+["menuOverlay","codeOverlay","cardOverlay","winOverlay"].forEach(id=>{
+  document.getElementById(id).addEventListener("click",e=>{ if(e.target.id===id) hide(id); });
+});
+
+function renderAll(){ renderGlobal(); renderHub(); paintRest(); }
+initBook();
+renderAll();
+</script>
+</body>
+</html>
