@@ -511,7 +511,7 @@ const PAGES = [
 const TOTAL = PAGES.reduce((a,p)=>a+p.count,0); // 118
 const COOLDOWN = 24*60*60*1000; // 24h
 const CARDS_PER_PACK = 2;
-const STORE_KEY = "album_de_tam_v2";
+const STORE_KEY = "album_de_tam_v3";
 
 /* Tirage — profil "Confort" (~2 mois ¼) */
 const TIER_PROB = { legendary:0.04, rare:0.20, common:0.76 };
@@ -541,6 +541,8 @@ const RARITY_PILL ={common:"pill-common",rare:"pill-rare",legendary:"pill-legend
 const BEAM_COLOR  ={common:"rgba(120,140,180,.45)",rare:"rgba(199,208,219,.55)",legendary:"rgba(245,196,81,.65)"};
 
 /* ============ STATE ============ */
+/* commande invisible : ouvrir le site avec #reset efface la progression et repart à zéro */
+if((location.hash||"").toLowerCase()==="#reset"){ try{localStorage.removeItem(STORE_KEY);}catch(e){} location.replace(location.pathname+location.search); }
 let state = load();
 function load(){
   try{ const r=JSON.parse(localStorage.getItem(STORE_KEY)); if(r&&r.owned) return r; }catch(e){}
