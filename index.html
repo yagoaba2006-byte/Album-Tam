@@ -436,7 +436,6 @@ textarea{width:100%;min-height:84px;background:var(--bg);border:1px solid var(--
       <button class="btn-ghost" id="saveFileBtn"><span class="e">💾</span><span><b>Sauvegarder ma collection</b><small>Télécharge un fichier de secours</small></span></button>
       <button class="btn-ghost" id="restoreBtn"><span class="e">♻️</span><span><b>Restaurer une sauvegarde</b><small>Recharge un fichier sauvegardé</small></span></button>
       <button class="btn-ghost" id="codeBtn"><span class="e">🔑</span><span><b>Code de sauvegarde</b><small>Copier / coller un code texte</small></span></button>
-      <button class="btn-ghost" id="testBtn"><span class="e">🔧</span><span><b>Réinitialiser le minuteur (test)</b><small>À retirer avant d'offrir</small></span></button>
     </div>
     <input type="file" id="fileInput" accept="application/json,.json,.txt" class="hidden" />
     <div class="note">Astuce : toi aussi, garde une copie du fichier de ton côté. Si quelque chose se perd, tu pourras tout restaurer.</div>
@@ -512,7 +511,7 @@ const PAGES = [
 const TOTAL = PAGES.reduce((a,p)=>a+p.count,0); // 118
 const COOLDOWN = 24*60*60*1000; // 24h
 const CARDS_PER_PACK = 2;
-const STORE_KEY = "album_de_tam_v1";
+const STORE_KEY = "album_de_tam_v2";
 
 /* Tirage — profil "Confort" (~2 mois ¼) */
 const TIER_PROB = { legendary:0.04, rare:0.20, common:0.76 };
@@ -928,7 +927,6 @@ $("#copyCodeBtn").onclick=()=>{ const a=$("#codeArea"); a.select();
 $("#applyCodeBtn").onclick=()=>{ const v=$("#codeArea").value.trim(); if(!v){toast("Colle un code d'abord");return;}
   try{ applyData(JSON.parse(decodeURIComponent(escape(atob(v))))); hide("codeOverlay"); }
   catch(e){ try{ applyData(JSON.parse(v)); hide("codeOverlay"); }catch(e2){ toast("Code invalide ✕"); } } };
-$("#testBtn").onclick=()=>{ state.lastOpen=null; save(); hide("menuOverlay"); renderAll(); toast("Minuteur réinitialisé 🔧"); };
 
 /* close overlay on backdrop tap (except pack reveal) */
 ["menuOverlay","codeOverlay","cardOverlay","winOverlay"].forEach(id=>{
