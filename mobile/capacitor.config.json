@@ -1,0 +1,19 @@
+{
+  "appId": "com.tam.album",
+  "appName": "Album de Tam",
+  "webDir": "www",
+  "backgroundColor": "#0A0E1AFF",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#0A0E1AFF",
+    "limitsNavigationsToAppBoundDomains": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 900,
+      "backgroundColor": "#0A0E1AFF",
+      "showSpinner": false
+    }
+  }
+}

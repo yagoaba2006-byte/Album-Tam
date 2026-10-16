@@ -1,0 +1,21 @@
+{
+  "name": "album-de-tam",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enveloppe iOS de L'album de Tam",
+  "scripts": {
+    "copier": "node scripts/copier-le-web.mjs",
+    "preparer": "npm run copier && npx cap sync ios",
+    "icones": "npx @capacitor/assets generate --ios --iconBackgroundColor '#0A0E1A' --splashBackgroundColor '#0A0E1A'",
+    "ouvrir": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "6.2.0",
+    "@capacitor/ios": "6.2.0",
+    "@capacitor/splash-screen": "6.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.2.0",
+    "@capacitor/assets": "3.0.5"
+  }
+}
